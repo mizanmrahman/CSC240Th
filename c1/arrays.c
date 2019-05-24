@@ -12,7 +12,7 @@ int main(void) {
   char e[] = {65, 66, 67, 68, 69, 70}; /* e is the size of the intializer */
   /* What happens if we declare an array with a size smaller than the initializer? */
 
-  int ii;
+  unsigned int ii;
 
   /* What happens when we go past the end of the array? */
   for (ii=0;ii<6;ii++) {
