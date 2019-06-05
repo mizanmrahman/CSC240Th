@@ -33,12 +33,12 @@ void say_hello() {
   printf("Hello!\n");
 }
 
-/* Returns a value, does not modify x */
+/* Call by Value: Returns a value, does not modify x */
 int add_ten(int x) {
   return x + 10;
 }
 
-/* Modifies x, does not return a value */
+/* Call by Address: Modifies x, does not return a value */
 void add_twenty(int *x) {
   *x = *x + 20;
 }
