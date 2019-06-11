@@ -43,7 +43,7 @@ int main(void) {
   printf("Char: 100 - A = %d\n", 100-'A');
   for(z=0;z<26;z++) {
      /* We can add an integer to a character literal */
-     printf("%c ", 'A' + z);
+     printf("%c ", 'A' - z);
   }
   printf("\n");
 

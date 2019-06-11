@@ -1,4 +1,5 @@
 #lang scheme
+
 "Review"
 (define a 1)
 (define b a)
@@ -21,12 +22,14 @@ c
 (newline)
 "null"
 null
+(null? '())
 (null? 3)
 (null? 0)
 ;(null? ())
+(null? (+ 5 2))
+(null? (cdr '(1)))
 (null? null?)
 (null? null)
-(null? '())
 
 (newline)
 "Tail recursive Fibonacci implementation"
@@ -47,24 +50,28 @@ null
 (define isit-lst2 (list + 2 3))
 (define isit-lst3 (list (+ 2 3 )))
 (define isit-lst4 (list '(+ 2 3 )))
+(define isit-lst5 (cons '+ (cons '2 (cons '3 '()))))
+(define isit-lst6 (cons + (cons 2 (cons 3 '()))))
 isit-lst0
 isit-lst1
 isit-lst2
 isit-lst3
 isit-lst4
+isit-lst5
+isit-lst6
 
 (length isit-lst4)
 (length (car isit-lst4))
-(car isit-lst1)
-(car isit-lst2)
+(car isit-lst4)
+(cdr isit-lst4)
 ;((car isit-lst1) 8 9 10)
 ((car isit-lst2) 8 9 10)
-;       +               2                 3
+;      +                 2                 3
 ((car isit-lst2) (cadr isit-lst2) (caddr isit-lst2))
 
 (newline)
 "More lists"
-(define exlst0 (list 2 3))
+(define exlst0 (list 2 (+ 2 1)))
 (define exlst1 (list list 2 3))
 (define exlst2 (list list 2 3 (list + 2 3) (+ 2 3)))
 (define exlst3 '(list 2 3 (list + 2 3) (+ 2 3)))
@@ -72,7 +79,6 @@ exlst0
 exlst1
 exlst2
 exlst3
-
 
 (newline)
 "Conditional statements"
@@ -86,6 +92,7 @@ exlst3
 (what-is-it? 2)
 (what-is-it? +)
 (what-is-it? -4)
+
 
 (define return-something
   (lambda (x)
@@ -102,13 +109,14 @@ exlst3
 (newline)
 "Recursion"
 (define increment
-  (lambda(x)
+  (lambda (x)
     (+ x 1)))
 (define decrement
   (lambda (x)
     (- x 1)))
 (increment 10)
 (decrement 10)
+
 (define recursive-add
   (lambda (x y)
     (if (zero? y)
@@ -126,13 +134,14 @@ exlst3
         n
         (recursive-mult-helper x (recursive-add x n) (decrement y)))))
 (recursive-mult 3 4)
-
+(recursive-mult 10 15)
 
 (newline)
-"Lists"
+"List operations"
 (car '(a))
 (cdr '(a))
 (cons 'b '(a))
+(newline)
 (define lst '(1 2 3 4))
 (car lst)
 (cdr lst)
@@ -140,24 +149,24 @@ exlst3
 (car (cons 0 lst))
 (cdr (cons 0 lst))
 (cons '(a b c) lst)
-(cons lst lst)
 (append '(a b c) lst)
 (append lst lst)
 (append lst (cons lst lst))
 
 (newline)
-"List procedures"
+"Procedures with lists"
 lst
 (define non-empty-list?
   (lambda (lst)
     (not (or (not (list? lst)) (null? lst)))))
 (non-empty-list? '())
+(non-empty-list? 3)
 (non-empty-list? lst)
 
 (define do-nothing
   (lambda (lst)
-    (if (not (non-empty-list? lst))
-        lst
+    (if (null? lst)
+        '()
         (cons (car lst) (do-nothing (cdr lst))))))
 (do-nothing '())
 (do-nothing lst)
@@ -166,6 +175,7 @@ lst
 (define atom?
   (lambda (x)
     (and (not (pair? x)) (not (null? x)))))
+"lat?"
 (define lat?
   (lambda (lst)
     (cond
@@ -176,19 +186,23 @@ lst
 (lat? '(a b c))
 (lat? '((1 2 3) (a b c)))
 
+"member?"
 (define member?
   (lambda (ele lst)
     (cond
       ((null? lst) #f)
-      ((eq? (car lst) ele) #t)
+      ((equal? (car lst) ele) #t)
       ((member? ele (cdr lst)) #t)
       (else #f))))
 (member? 3 '(1 2 3 4))
 (member? 5 '(1 2 3 4))
 (member? 4 '(1 2 (3 4) 5))
+(member? '(3 4) '(1 2 (3 4) 5))
 (member? 5 '(1 2 (3 4) 5))
 
 "Remove an element from a list - from The Little Schemer"
+;Only removes the *first* occurrence
+"rember"
 (define rember
   (lambda (ele lst)
     (cond
@@ -211,7 +225,7 @@ lst
 (replace 3 '(1 2 3 4 3 2 1) 'three)
 (replace 'b '(a b c a b c d e f) 'B)
 
-"Add two list of numbers"
+"Add two lists of numbers"
 (define addlists
   (lambda (lst1 lst2)
     (cond
@@ -228,7 +242,7 @@ lst
     (if (< n 1)
         '()
         (append (numlist (- n 1)) (list n)))))
-(numlist 4)
+(numlist 10)
 
 "Sum the elements of a list"
 (define sumlist
@@ -243,7 +257,7 @@ lst
 "Double each element in the list"
 (define double
   (lambda (x)
-    (* 2 x)))
+    (* x 2)))
 (define doublelist
   (lambda (lst)
     (if (null? lst)
@@ -261,19 +275,19 @@ lst
         (+ (double (car lst)) (sumdoublelist (cdr lst))))))
 (sumdoublelist lst)
 
-(define better-sumdoublelist
+(define better-sumdoublelst
   (lambda (lst)
     (sumlist (doublelist lst))))
-(better-sumdoublelist lst)
+(better-sumdoublelst lst)
 
 "Duplicate each element of the list"
 (define duplicatelist
   (lambda (lst)
     (if (null? lst)
-      '()
-      (cons (car lst) (cons (car lst) (duplicatelist (cdr lst)))))))
+        '()
+        (cons (car lst) (cons (car lst) (duplicatelist (cdr lst)))))))
 (duplicatelist lst)
-
+    
 "Return list with only numbers"
 (define onlynums
   (lambda (lst)
@@ -284,10 +298,7 @@ lst
             (onlynums (cdr lst))))))
 (onlynums '('hello "world"))
 (onlynums (list a b c 'd 'e 'f 1 2 3 'hello '(4 5 6) + - (+ 2 3)))
-(duplicatelist (onlynums (list a b c 'd 'e 'f 1 2 3 'hello '(4 5 6) + - (+ 2 3))))
-(sumdoublelist (onlynums (list a b c 'd 'e 'f 1 2 3 'hello '(4 5 6) + - (+ 2 3))))
 
-(newline)
 "Pairs"
 (cons 1 '(2))
 (cons 1 2)
@@ -297,9 +308,9 @@ lst
 (pair? (cons 1 2))
 (car '(1 . 2))
 (cdr '(1 . 2))
-(define pair1 '(a . b))     ; [ a . b ]
-(define pair2 '(a . ()))   ; [ a . '() ] => (a)
-(define pair3 '(a . (b)))   ; [ a . [ b . '() ] ] => (a b)
+(define pair1 '(a . b))       ; [a . b]
+(define pair2 '(a . ()))      ; [a . ()] => (a)
+(define pair3 '(a . (b)))     ; [a . [b . ()]] => (a b)
 pair1
 pair2
 pair3
@@ -309,6 +320,8 @@ pair3
 (cons 'a '())
 (cons 'a (cons 'b '()))
 
-;example of pairs
-'(30, 90)  ;lat/long
+;examples of pair
+'(30 . 90)    ; lat/long
 '(neworleans . (30 . 90))
+
+
