@@ -49,7 +49,7 @@ int main() {
 
     // Pointers
     int * ptr = nullptr;    // Null pointer
-    if (ptr == nulptr) {
+    if (ptr == nullptr) {
        cout << "ptr is null" << endl;
     }
 
